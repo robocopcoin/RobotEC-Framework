@@ -65,15 +65,16 @@ class SettingsBuilder(ast.NodeVisitor):
 
     def visit_ResourceSetting(self, node):
         self.suite.resource.imports.create(type='Resource', name=node.name,
-                                           args=node.args)
+                                           args=node.args, lineno=node.lineno)
 
     def visit_LibrarySetting(self, node):
         self.suite.resource.imports.create(type='Library', name=node.name,
-                                           args=node.args, alias=node.alias)
+                                           args=node.args, alias=node.alias,
+                                           lineno=node.lineno)
 
     def visit_VariablesSetting(self, node):
         self.suite.resource.imports.create(type='Variables', name=node.name,
-                                           args=node.args)
+                                           args=node.args, lineno=node.lineno)
 
     def visit_VariableSection(self, node):
         pass
