@@ -22,7 +22,8 @@ from robot.output import librarylogger as logger
 from robot.utils import (format_assign_message, frange, get_error_message,
                          is_list_like, is_number, plural_or_not as s,
                          split_from_equals, type_name)
-from robot.variables import is_dict_variable, is_scalar_assign
+from robot.variables import is_dict_variable, is_scalar_assign, evaluate_expression
+from .arguments.argumentresolver import VariableReplacer
 
 from .statusreporter import StatusReporter
 
@@ -55,6 +56,9 @@ class StepRunner(object):
         if step.type == step.FOR_LOOP_TYPE:
             runner = ForRunner(context, self._templated, step.flavor)
             return runner.run(step)
+        if step.type == step.IF_EXPRESSION_TYPE:
+            runner = IfRunner(context, self._templated)
+            return runner.run(step)
         runner = context.get_runner(name or step.name)
         if context.dry_run:
             return runner.dry_run(step, context)
@@ -68,6 +72,52 @@ def ForRunner(context, templated=False, flavor='IN'):
                'IN ENUMERATE': ForInEnumerateRunner}
     runner = runners[flavor or 'IN']
     return runner(context, templated)
+
+
+class IfRunner(object):
+
+    def __init__(self, context, templated=False):
+        self._context = context
+        self._templated = templated
+
+    def _get_type(self, data, first, datacondition):
+        if first:
+            return data.IF_EXPRESSION_TYPE
+        if datacondition is True:
+            return data.ELSE_TYPE
+        return data.ELSE_IF_TYPE
+
+    def run(self, data, name=None):
+        first = True
+        condition_matched = False
+        for datacondition, body in data.bodies:
+            branch_to_execute, result = self._branch_to_be_executed(data, first, datacondition, body, condition_matched)
+            condition_matched = condition_matched or branch_to_execute
+            with StatusReporter(self._context, result, dry_run_lib_kw=not branch_to_execute):
+                if branch_to_execute:
+                    runner = StepRunner(self._context, self._templated)
+                    runner.run_steps(body)
+            first = False
+
+    def _branch_to_be_executed(self, data, first, datacondition, body, condition_matched_already):
+        data_type = self._get_type(data, first, datacondition)
+        condition_result = data_type == data.ELSE_TYPE
+        unresolved_condition = ''
+        if not condition_result:
+            unresolved_condition = datacondition[0]
+            if not condition_matched_already:
+                condition, _ = VariableReplacer().replace([unresolved_condition], (), variables=self._context.variables)
+                resolved_condition = condition[0]
+                condition_result = evaluate_expression(resolved_condition, self._context.variables)
+        branch_to_execute = not condition_matched_already and condition_result and body
+        result = KeywordResult(kwname=self._get_name(unresolved_condition),
+                               type=data_type)
+        return branch_to_execute, result
+
+    def _get_name(self, condition):
+        if not condition:
+            return ''
+        return ' [ %s ]' % (condition)
 
 
 class ForInRunner(object):

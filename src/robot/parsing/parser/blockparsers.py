@@ -15,6 +15,7 @@
 
 from ..lexer import Token
 from ..model import TestCase, Keyword, ForLoop
+from ..model.blocks import IfBlock
 
 
 class Parser(object):
@@ -44,6 +45,9 @@ class TestCaseParser(Parser):
         if statement.type == Token.FOR:
             parser = ForLoopParser(statement)
             model = parser.model
+        elif statement.type == Token.IF:
+            parser = IfParser(statement)
+            model = parser.model
         else:
             parser = None
             model = statement
@@ -65,11 +69,34 @@ class KeywordParser(Parser):
         if statement.type == Token.FOR:
             parser = ForLoopParser(statement)
             model = parser.model
+        elif statement.type == Token.IF:
+            parser = IfParser(statement)
+            model = parser.model
         else:
             parser = None
             model = statement
         self.model.body.append(model)
         return parser
+
+
+class IfParser(Parser):
+
+    def __init__(self, header):
+        Parser.__init__(self, IfBlock(header))
+        self.end_seen = False
+
+    def handles(self, statement):
+        if self.end_seen:
+            return False
+        name_tokens = (Token.TESTCASE_NAME, Token.KEYWORD_NAME)
+        return statement.type not in Token.HEADER_TOKENS + name_tokens
+
+    def parse(self, statement):
+        if statement.type == Token.END:
+            self.model.end = statement
+            self.end_seen = True
+        else:
+            self.model.body.append(statement)
 
 
 class ForLoopParser(Parser):

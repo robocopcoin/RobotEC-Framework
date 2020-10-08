@@ -17,7 +17,7 @@ from ast import NodeVisitor
 
 from robot.variables import VariableIterator
 
-from ..model import ForLoop, Keyword
+from ..model import ForLoop, Keyword, IfExpression
 from .testsettings import TestSettings
 
 
@@ -183,6 +183,11 @@ class TestCaseBuilder(NodeVisitor):
         ForLoopBuilder(loop).visit(node)
         self.test.keywords.append(loop)
 
+    def visit_IfBlock(self, node):
+        ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
+        IfExpressionBuilder(ifblock).visit(node)
+        self.test.keywords.append(ifblock)
+
     def visit_TemplateArguments(self, node):
         self.test.keywords.create(args=node.args, lineno=node.lineno)
 
@@ -251,6 +256,11 @@ class KeywordBuilder(NodeVisitor):
         ForLoopBuilder(loop).visit(node)
         self.kw.keywords.append(loop)
 
+    def visit_IfBlock(self, node):
+        ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
+        IfExpressionBuilder(ifblock).visit(node)
+        self.kw.keywords.append(ifblock)
+
 
 class ForLoopBuilder(NodeVisitor):
 
@@ -263,3 +273,22 @@ class ForLoopBuilder(NodeVisitor):
 
     def visit_TemplateArguments(self, node):
         self.loop.keywords.create(args=node.args, lineno=node.lineno)
+
+
+class IfExpressionBuilder(NodeVisitor):
+
+    def __init__(self, ifblock):
+        self.ifblock = ifblock
+
+    def visit_KeywordCall(self, node):
+        self.ifblock.create_keyword(name=node.keyword, args=node.args,
+                                  assign=node.assign, lineno=node.lineno)
+
+    def visit_TemplateArguments(self, node):
+        self.ifblock.create_keyword(args=node.args, lineno=node.lineno)
+
+    def visit_ElseIfStatement(self, node):
+        self.ifblock.create_elseif(node.value)
+
+    def visit_Else(self, node):
+        self.ifblock.create_else()

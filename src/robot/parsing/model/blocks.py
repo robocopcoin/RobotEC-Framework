@@ -122,6 +122,32 @@ class Keyword(Block):
         return self.header.name
 
 
+class IfBlock(Block):
+    _fields = ('header', 'body', 'elsebody', 'end')
+
+    def __init__(self, header, body=None, elsebody=None, end=None):
+        self.header = header
+        self.body = body or []
+        self.elsebody = elsebody or []
+        self.end = end
+
+    @property
+    def variables(self):
+        return self.header.variables
+
+    @property
+    def value(self):
+        return self.header.value
+
+    @property
+    def _header(self):
+        return self.header._header
+
+    @property
+    def _end(self):
+        return self.end.value if self.end else None
+
+
 class ForLoop(Block):
     _fields = ('header', 'body', 'end')
 
