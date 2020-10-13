@@ -19,3 +19,13 @@ Nested ifs
    END
    Should be equal  ${calculator}  ${4}
 
+Direct Boolean condition
+   IF  ${True}
+      Pass Execution  From the condition
+   END
+   Fail  condition not working
+
+Direct Boolean condition false
+   IF  ${False}
+      Fail  should not execute
+   END

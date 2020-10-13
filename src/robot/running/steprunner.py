@@ -21,7 +21,7 @@ from robot.result import Keyword as KeywordResult
 from robot.output import librarylogger as logger
 from robot.utils import (format_assign_message, frange, get_error_message,
                          is_list_like, is_number, plural_or_not as s,
-                         split_from_equals, type_name)
+                         split_from_equals, type_name, is_unicode)
 from robot.variables import is_dict_variable, is_scalar_assign, evaluate_expression
 from .arguments.argumentresolver import VariableReplacer
 
@@ -108,7 +108,10 @@ class IfRunner(object):
             if not condition_matched_already:
                 condition, _ = VariableReplacer().replace([unresolved_condition], (), variables=self._context.variables)
                 resolved_condition = condition[0]
-                condition_result = evaluate_expression(resolved_condition, self._context.variables)
+                if is_unicode(resolved_condition):
+                    condition_result = evaluate_expression(resolved_condition, self._context.variables)
+                else:
+                    condition_result = bool(resolved_condition)
         branch_to_execute = not condition_matched_already and condition_result and body
         result = KeywordResult(kwname=self._get_name(unresolved_condition),
                                type=data_type)
