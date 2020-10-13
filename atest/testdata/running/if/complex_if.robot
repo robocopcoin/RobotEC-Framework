@@ -10,22 +10,28 @@ Multiple keywords in if
 
 Nested ifs
    ${calculator}=  Set Variable  1
-   IF  'kuu on taivaalla'
+   IF  'kuu on taivaalla taas'
       ${calculator}=  Evaluate  1+${calculator}
       IF  'sininen on taivas'
-            ${calculator}=  Evaluate  1+${calculator}
+            ${calculator}=  Evaluate  3+${calculator}
+      ELSE
+            ${calculator}=  Evaluate  10+${calculator}
+      END
+      IF  ${False}
+            ${calculator}=  Evaluate  2+${calculator}
       END
       ${calculator}=  Evaluate  1+${calculator}
    END
-   Should be equal  ${calculator}  ${4}
+   Should be equal  ${calculator}  ${6}
 
 If inside for loop
+   ${outerval}=  Set Variable  wrong
    FOR  ${var}  IN  1  2  3
-       IF  ${var} == 3
-          Pass Execution   condition should be met
+       IF  ${var} == 2
+          ${outerval}=  Set Variable  ${var}
        END
    END
-   Fail  condition not met
+   Should be equal  ${outerval}  2
 
 For loop inside if
    ${value}   Set Variable   0
@@ -33,6 +39,8 @@ For loop inside if
         FOR  ${var}  IN  1  2  3
             ${value}=   Set Variable  ${var}
         END
+   ELSE IF 'ei tanne'
+        ${value}=  Set Variable  123
    END
    Should be equal  ${value}  3
 
