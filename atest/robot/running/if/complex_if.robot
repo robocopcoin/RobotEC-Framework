@@ -9,3 +9,14 @@ Multiple keywords in if
 Nested ifs
    Check Test Case    ${TESTNAME}
 
+If inside for loop
+   Check Test Case    ${TESTNAME}
+
+For loop inside if
+   Check Test Case    ${TESTNAME}
+
+Direct Boolean condition
+   Check Test Case    ${TESTNAME}
+
+Direct Boolean condition false
+   Check Test Case    ${TESTNAME}
