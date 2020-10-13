@@ -229,6 +229,7 @@ class IfBlockLexer(BlockLexer):
         BlockLexer.__init__(self, ctx)
         self._end_seen = False
         self._else_seen = False
+        self._if_level = 0
 
     def handles(self, statement):
         return IfStatementLexer(self.ctx).handles(statement)
@@ -238,8 +239,11 @@ class IfBlockLexer(BlockLexer):
 
     def input(self, statement):
         lexer = BlockLexer.input(self, statement)
+        if isinstance(lexer, IfStatementLexer):
+            self._if_level += 1
         if isinstance(lexer, EndLexer):
-            self._end_seen = True
+            self._end_seen = self._if_level == 0
+            self._if_level -= 1
         if isinstance(lexer, ElseLexer):
             if self._else_seen:
                 raise DataError("line [%s] : Invalid second ELSE detected" % lexer.lineno)
