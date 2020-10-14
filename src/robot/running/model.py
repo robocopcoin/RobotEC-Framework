@@ -131,6 +131,9 @@ class IfExpression(Keyword):
     def create_keyword(self, name='', args=(), assign=(), lineno=None):
         self.bodies[-1][1].create(name=name, args=args, assign=assign, lineno=lineno)
 
+    def add_ifblock(self, ifblock):
+        self.bodies[-1][1].append(ifblock)
+
     def create_elseif(self, value):
         self.bodies.append((value, Keywords(self.keyword_class, self, None)))
 

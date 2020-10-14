@@ -185,7 +185,7 @@ class TestCaseBuilder(NodeVisitor):
 
     def visit_IfBlock(self, node):
         ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
-        IfExpressionBuilder(ifblock).visit(node)
+        IfExpressionBuilder(ifblock).build(node)
         self.test.keywords.append(ifblock)
 
     def visit_TemplateArguments(self, node):
@@ -280,6 +280,10 @@ class IfExpressionBuilder(NodeVisitor):
     def __init__(self, ifblock):
         self.ifblock = ifblock
 
+    def build(self, ifnode):
+        for child_node in ifnode.body:
+            self.visit(child_node)
+
     def visit_KeywordCall(self, node):
         self.ifblock.create_keyword(name=node.keyword, args=node.args,
                                   assign=node.assign, lineno=node.lineno)
@@ -292,3 +296,8 @@ class IfExpressionBuilder(NodeVisitor):
 
     def visit_Else(self, node):
         self.ifblock.create_else()
+
+    def visit_IfBlock(self, node):
+        ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
+        IfExpressionBuilder(ifblock).build(node)
+        self.ifblock.add_ifblock(ifblock)
