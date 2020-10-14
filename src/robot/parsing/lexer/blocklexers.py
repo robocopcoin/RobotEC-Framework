@@ -215,7 +215,7 @@ class ForLoopLexer(BlockLexer):
 
     def input(self, statement):
         lexer = BlockLexer.input(self, statement)
-        if isinstance(lexer, (IfStatementLexer, ForLoopLexer)):
+        if isinstance(lexer, (IfStatementLexer, ForLoopHeaderLexer)):
             self._block_level += 1
         if isinstance(lexer, EndLexer):
             self._end_seen = self._block_level == 0
@@ -243,7 +243,7 @@ class IfBlockLexer(BlockLexer):
 
     def input(self, statement):
         lexer = BlockLexer.input(self, statement)
-        if isinstance(lexer, (IfStatementLexer, ForLoopLexer)):
+        if isinstance(lexer, (IfStatementLexer, ForLoopHeaderLexer)):
             self._block_level += 1
         if isinstance(lexer, EndLexer):
             self._end_seen = self._block_level == 0
