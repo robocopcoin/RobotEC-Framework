@@ -274,6 +274,11 @@ class ForLoopBuilder(NodeVisitor):
     def visit_TemplateArguments(self, node):
         self.loop.keywords.create(args=node.args, lineno=node.lineno)
 
+    def visit_IfBlock(self, node):
+        ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
+        IfExpressionBuilder(ifblock).build(node)
+        self.loop.keywords.append(ifblock)
+
 
 class IfExpressionBuilder(NodeVisitor):
 
