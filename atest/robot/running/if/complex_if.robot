@@ -15,6 +15,9 @@ If inside for loop
 For loop inside if
    Check Test Case    ${TESTNAME}
 
+For loop inside for loop
+   Check Test Case    ${TESTNAME}
+
 Direct Boolean condition
    Check Test Case    ${TESTNAME}
 

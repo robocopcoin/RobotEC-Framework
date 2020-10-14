@@ -46,8 +46,8 @@ For loop inside if
 
 For loop inside for loop
    ${checker}  Set Variable  wrong
-   FOR  ${first}  1  2  3
-      FOR  ${second}  4  5  6
+   FOR  ${first}  IN  1  2  3
+      FOR  ${second}  IN  4  5  6
           ${checker}  Set Variable  ${first} - ${second}
       END
    END
