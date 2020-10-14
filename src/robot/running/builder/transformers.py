@@ -180,7 +180,7 @@ class TestCaseBuilder(NodeVisitor):
         # Header and end used only for deprecation purposes. Remove in RF 3.3!
         loop = ForLoop(node.variables, node.values, node.flavor, node.lineno,
                        node._header, node._end)
-        ForLoopBuilder(loop).visit(node)
+        ForLoopBuilder(loop).build(node)
         self.test.keywords.append(loop)
 
     def visit_IfBlock(self, node):
@@ -253,12 +253,12 @@ class KeywordBuilder(NodeVisitor):
         # Header and end used only for deprecation purposes. Remove in RF 3.3!
         loop = ForLoop(node.variables, node.values, node.flavor, node.lineno,
                        node._header, node._end)
-        ForLoopBuilder(loop).visit(node)
+        ForLoopBuilder(loop).build(node)
         self.kw.keywords.append(loop)
 
     def visit_IfBlock(self, node):
         ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
-        IfExpressionBuilder(ifblock).visit(node)
+        IfExpressionBuilder(ifblock).build(node)
         self.kw.keywords.append(ifblock)
 
 
@@ -266,6 +266,10 @@ class ForLoopBuilder(NodeVisitor):
 
     def __init__(self, loop):
         self.loop = loop
+
+    def build(self, ifnode):
+        for child_node in ifnode.body:
+            self.visit(child_node)
 
     def visit_KeywordCall(self, node):
         self.loop.keywords.create(name=node.keyword, args=node.args,
@@ -278,6 +282,13 @@ class ForLoopBuilder(NodeVisitor):
         ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
         IfExpressionBuilder(ifblock).build(node)
         self.loop.keywords.append(ifblock)
+
+    def visit_ForLoop(self, node):
+        # Header and end used only for deprecation purposes. Remove in RF 3.3!
+        loop = ForLoop(node.variables, node.values, node.flavor, node.lineno,
+                       node._header, node._end)
+        ForLoopBuilder(loop).build(node)
+        self.loop.keywords.append(loop)
 
 
 class IfExpressionBuilder(NodeVisitor):
@@ -311,5 +322,5 @@ class IfExpressionBuilder(NodeVisitor):
         # Header and end used only for deprecation purposes. Remove in RF 3.3!
         loop = ForLoop(node.variables, node.values, node.flavor, node.lineno,
                        node._header, node._end)
-        ForLoopBuilder(loop).visit(node)
+        ForLoopBuilder(loop).build(node)
         self.ifblock.add_inner_block(loop)
