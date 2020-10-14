@@ -92,15 +92,21 @@ class IfParser(Parser):
         return statement.type not in Token.HEADER_TOKENS + name_tokens
 
     def parse(self, statement):
-        if statement.type == Token.IF:
+        if statement.type == Token.FOR:
+            parser = ForLoopParser(statement)
+            model = parser.model
+        elif statement.type == Token.IF:
             parser = IfParser(statement)
-            self.model.body.append(parser.model)
-            return parser
-        if statement.type == Token.END:
+            model = parser.model
+        elif statement.type == Token.END:
             self.model.end = statement
             self.end_seen = True
+            return
         else:
-            self.model.body.append(statement)
+            parser = None
+            model = statement
+        self.model.body.append(model)
+        return parser
 
 
 class ForLoopParser(Parser):
