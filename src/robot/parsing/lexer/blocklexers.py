@@ -220,7 +220,7 @@ class ForLoopLexer(BlockLexer):
             statement.pop(0)
 
     def lexer_classes(self):
-        return (ForLoopHeaderLexer, EndLexer, KeywordCallLexer)
+        return (ForLoopHeaderLexer, EndLexer, IfBlockLexer, KeywordCallLexer)
 
 
 class IfBlockLexer(BlockLexer):
