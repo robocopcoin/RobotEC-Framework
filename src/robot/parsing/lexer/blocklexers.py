@@ -252,6 +252,8 @@ class IfBlockLexer(BlockLexer):
             if self._else_seen:
                 raise DataError("line [%s] : Invalid second ELSE detected" % lexer.lineno)
             self._else_seen = True
+        if isinstance(lexer, ElseIfStatementLexer) and self._else_seen:
+            raise DataError("line [%s] : Invalid ELSE IF detected after ELSE" % lexer.lineno)
 
     def lexer_classes(self):
         return (IfStatementLexer, ElseIfStatementLexer, ElseLexer, ForLoopHeaderLexer, EndLexer, KeywordCallLexer)

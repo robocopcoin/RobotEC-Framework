@@ -48,6 +48,18 @@ Directory Containing File With Invalid Encoding
     ...    UnicodeDecodeError: .*
     ...    ${PARSING}/invalid_encoding/invalid_encoding.robot
 
+If with else after else
+    Run tests and check parsing error
+    ...    ${PARSING}/if/else_after_else.robot
+    ...    .* Invalid second ELSE detected
+    ...    ${PARSING}/if/else_after_else.robot
+
+If with else if after else
+    Run tests and check parsing error
+    ...    ${PARSING}/if/else_if_after_else.robot
+    ...    .* Invalid ELSE IF detected after ELSE
+    ...    ${PARSING}/if/else_if_after_else.robot
+
 Multisource Containing File With Invalid Encoding
     Run tests and check parsing error
     ...    ${PARSING}/invalid_encoding/invalid_encoding.robot ${PARSING}/invalid_encoding/a_valid_file.robot
