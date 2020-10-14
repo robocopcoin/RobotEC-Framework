@@ -33,6 +33,13 @@ If inside for loop
    END
    Should be equal  ${outerval}  2
 
+Setting after if
+   ${var}=  Set Variable  not found
+   IF  'something'
+      ${var}=  Set Variable  found
+   END
+   [Teardown]  Log  Teardown was ${var} and executed.
+
 For loop inside if
    ${value}   Set Variable   0
    IF  'kaunis maailma'

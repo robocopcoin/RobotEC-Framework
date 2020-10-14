@@ -218,7 +218,7 @@ class ForLoopLexer(BlockLexer):
         if isinstance(lexer, (IfStatementLexer, ForLoopHeaderLexer)):
             self._block_level += 1
         if isinstance(lexer, EndLexer):
-            self._end_seen = self._block_level == 0
+            self._end_seen = self._block_level == 1
             self._block_level -= 1
         elif statement[0].type == Token.OLD_FOR_INDENT:
             statement.pop(0)
@@ -246,7 +246,7 @@ class IfBlockLexer(BlockLexer):
         if isinstance(lexer, (IfStatementLexer, ForLoopHeaderLexer)):
             self._block_level += 1
         if isinstance(lexer, EndLexer):
-            self._end_seen = self._block_level == 0
+            self._end_seen = self._block_level == 1
             self._block_level -= 1
         if isinstance(lexer, ElseLexer):
             if self._else_seen:

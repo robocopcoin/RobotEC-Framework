@@ -12,6 +12,10 @@ Nested ifs
 If inside for loop
    Check Test Case    ${TESTNAME}
 
+Setting after if
+   ${tc} =    Check test case    ${TEST NAME}
+   Check log message     ${tc.teardown.msgs[0]}    Teardown was found and executed.
+
 For loop inside if
    Check Test Case    ${TESTNAME}
 
