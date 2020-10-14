@@ -300,4 +300,11 @@ class IfExpressionBuilder(NodeVisitor):
     def visit_IfBlock(self, node):
         ifblock = IfExpression(node.value, node.lineno, node._header, node._end)
         IfExpressionBuilder(ifblock).build(node)
-        self.ifblock.add_ifblock(ifblock)
+        self.ifblock.add_inner_block(ifblock)
+
+    def visit_ForLoop(self, node):
+        # Header and end used only for deprecation purposes. Remove in RF 3.3!
+        loop = ForLoop(node.variables, node.values, node.flavor, node.lineno,
+                       node._header, node._end)
+        ForLoopBuilder(loop).visit(node)
+        self.ifblock.add_inner_block(loop)

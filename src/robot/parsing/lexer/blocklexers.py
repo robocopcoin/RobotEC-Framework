@@ -250,4 +250,4 @@ class IfBlockLexer(BlockLexer):
             self._else_seen = True
 
     def lexer_classes(self):
-        return (IfStatementLexer, ElseIfStatementLexer, ElseLexer, EndLexer, KeywordCallLexer)
+        return (IfStatementLexer, ElseIfStatementLexer, ElseLexer, EndLexer, ForLoopLexer, KeywordCallLexer)

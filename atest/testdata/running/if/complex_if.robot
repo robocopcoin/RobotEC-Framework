@@ -39,7 +39,7 @@ For loop inside if
         FOR  ${var}  IN  1  2  3
             ${value}=   Set Variable  ${var}
         END
-   ELSE IF 'ei tanne'
+   ELSE IF  'ei tanne'
         ${value}=  Set Variable  123
    END
    Should be equal  ${value}  3
