@@ -123,12 +123,11 @@ class Keyword(Block):
 
 
 class IfBlock(Block):
-    _fields = ('header', 'body', 'elsebody', 'end')
+    _fields = ('header', 'body', 'end')
 
-    def __init__(self, header, body=None, elsebody=None, end=None):
+    def __init__(self, header, body=None, end=None):
         self.header = header
         self.body = body or []
-        self.elsebody = elsebody or []
         self.end = end
 
     @property
