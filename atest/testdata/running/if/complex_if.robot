@@ -44,6 +44,15 @@ For loop inside if
    END
    Should be equal  ${value}  3
 
+For loop inside for loop
+   ${checker}  Set Variable  wrong
+   FOR  ${first}  1  2  3
+      FOR  ${second}  4  5  6
+          ${checker}  Set Variable  ${first} - ${second}
+      END
+   END
+   Should be equal  ${checker}  3 - 6
+
 Direct Boolean condition
    [Documentation]  PASS From the condition
    IF  ${True}
