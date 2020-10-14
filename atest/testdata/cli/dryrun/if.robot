@@ -1,12 +1,18 @@
+*** Settings ***
+Resource        resource.robot
+
 *** Test Cases ***
 IF is not executed in dry run
     Recursive if  call again
+    This is validated
 
 ELSE IF is not executed in dry run
     Recursive else if  call again
+    This is validated
 
 ELSE is not executed in dry run
     Recursive else  call again
+    This is validated
 
 *** Keywords ***
 Recursive if

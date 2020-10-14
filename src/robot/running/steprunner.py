@@ -103,6 +103,8 @@ class IfRunner(object):
         data_type = self._get_type(data, first, datacondition)
         condition_result = data_type == data.ELSE_TYPE
         unresolved_condition = ''
+        if self._context.dry_run:
+            condition_matched_already = True
         if not condition_result:
             unresolved_condition = datacondition[0]
             if not condition_matched_already:
