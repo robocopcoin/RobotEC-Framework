@@ -71,3 +71,25 @@ Direct Boolean condition false
    IF  ${False}
       Fail  should not execute
    END
+
+Nesting insanity
+   ${assumption}  Set Variable  is wrong
+   IF  ${True}
+      FOR  ${iter}  IN  1  2  3
+         IF  ${iter} == 1
+             ${assumption}  Set Variable  2 5 9 8
+         END
+         IF  ${iter} == 2
+             FOR  ${iter2}  IN  4  5  6
+                 IF  ${iter2} == 5
+                     FOR  ${iter3}  IN  7  8  9
+                         ${assumption}  Set Variable  ${assumption} ${iter3}
+                     END
+                     ${assumption}  Set Variable  ${assumption} ${iter2}
+                 END
+             END
+             ${assumption}  Set Variable  ${assumption} ${iter}
+         END
+      END
+   END
+   Should be equal  ${assumption}  2 5 9 8 7 8 9 5 2

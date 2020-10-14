@@ -51,3 +51,50 @@ If else - else executed - failing
   ELSE
       Fail  expected
   END
+
+If passing in keyword
+  Passing if keyword
+
+If passing in else keyword
+  Passing else keyword
+
+If failing in keyword
+  [Documentation]    FAIL expected
+  Failing if keyword
+
+If failing in else keyword
+  [Documentation]    FAIL expected
+  Failing else keyword
+
+*** Keywords ***
+Passing if keyword
+  IF  ${1}
+     Log  expected
+  ELSE IF  12 < 14
+     Fail  should not go here
+  ELSE
+     Fail  not here
+  END
+
+Passing else keyword
+  IF  ${False}
+     Fail  not here
+  ELSE
+     Log  expected
+  END
+
+Failing if keyword
+  IF  ${1}
+     Fail  expected
+  ELSE IF  12 < 14
+     Log  should not go here
+  ELSE
+     Log  not here
+  END
+
+Failing else keyword
+  IF  ${False}
+     Log   should not here
+  ELSE
+     Fail  expected
+  END

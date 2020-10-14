@@ -26,3 +26,15 @@ If else - if executed - failing
 
 If else - else executed - failing
   Check Test Case    ${TESTNAME}
+
+If passing in keyword
+  Check Test Case    ${TESTNAME}
+
+If passing in else keyword
+  Check Test Case    ${TESTNAME}
+
+If failing in keyword
+  Check Test Case    ${TESTNAME}
+
+If failing in else keyword
+  Check Test Case    ${TESTNAME}

@@ -27,3 +27,6 @@ Direct Boolean condition
 
 Direct Boolean condition false
    Check Test Case    ${TESTNAME}
+
+Nesting insanity
+   Check Test Case    ${TESTNAME}
