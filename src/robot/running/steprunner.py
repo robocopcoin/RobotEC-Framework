@@ -91,17 +91,22 @@ class IfRunner(object):
 
     def run(self, data, name=None):
         IfRunner.current_if_stack.append(data)
-        first = True
-        condition_matched = False
-        for datacondition, body in data.bodies:
-            branch_to_execute, result = self._branch_to_be_executed(data, first, datacondition, body, condition_matched)
-            condition_matched = condition_matched or branch_to_execute
-            with StatusReporter(self._context, result, dry_run_lib_kw=not branch_to_execute):
-                if branch_to_execute:
-                    runner = StepRunner(self._context, self._templated)
-                    runner.run_steps(body)
-            first = False
-        IfRunner.current_if_stack.pop()
+        try:
+            first = True
+            condition_matched = False
+            for datacondition, body in data.bodies:
+                condition_matched = self._run_if_branch(body, condition_matched, data, datacondition, first)
+                first = False
+        finally:
+            IfRunner.current_if_stack.pop()
+
+    def _run_if_branch(self, body, condition_matched, data, datacondition, first):
+        branch_to_execute, result = self._branch_to_be_executed(data, first, datacondition, body, condition_matched)
+        with StatusReporter(self._context, result, dry_run_lib_kw=not branch_to_execute):
+            if branch_to_execute:
+                runner = StepRunner(self._context, self._templated)
+                runner.run_steps(body)
+        return condition_matched or branch_to_execute
 
     def _branch_to_be_executed(self, data, first, datacondition, body, condition_matched_already):
         data_type = self._get_type(data, first, datacondition)
@@ -110,12 +115,7 @@ class IfRunner(object):
         if not condition_result:
             unresolved_condition = datacondition[0]
             if not condition_matched_already and not self._context.dry_run:
-                condition, _ = VariableReplacer().replace([unresolved_condition], (), variables=self._context.variables)
-                resolved_condition = condition[0]
-                if is_unicode(resolved_condition):
-                    condition_result = evaluate_expression(resolved_condition, self._context.variables)
-                else:
-                    condition_result = bool(resolved_condition)
+                condition_result = self._resolve_condition(unresolved_condition)
         branch_to_execute = self._is_branch_to_execute(condition_matched_already,
                                                        condition_result,
                                                        body)
@@ -123,11 +123,21 @@ class IfRunner(object):
                                type=data_type)
         return branch_to_execute, result
 
+    def _resolve_condition(self, unresolved_condition):
+        condition, _ = VariableReplacer().replace([unresolved_condition], (), variables=self._context.variables)
+        resolved_condition = condition[0]
+        if is_unicode(resolved_condition):
+            return evaluate_expression(resolved_condition, self._context.variables)
+        return bool(resolved_condition)
+
     def _is_branch_to_execute(self, condition_matched_already, condition_result, body):
         if self._context.dry_run:
-            current = IfRunner.current_if_stack[-1]
-            return current not in IfRunner.current_if_stack[:-1]
+            return not self._is_already_executing_this_if()
         return not condition_matched_already and condition_result and body
+
+    def _is_already_executing_this_if(self):
+        current = IfRunner.current_if_stack[-1]
+        return current in IfRunner.current_if_stack[:-1]
 
     def _get_name(self, condition):
         if not condition:
