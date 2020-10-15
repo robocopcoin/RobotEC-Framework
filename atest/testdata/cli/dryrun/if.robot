@@ -14,6 +14,13 @@ ELSE is not executed in dry run
     Recursive else  call again
     This is validated
 
+Dryrun fail inside of IF
+    [Documentation]    FAIL    Keyword 'resource.Anarchy in the UK' expected 3 arguments, got 2.
+    IF  'something' == 'thing'
+       Anarchy in the UK    1    2
+    END
+    This is validated
+
 *** Keywords ***
 Recursive if
     [Arguments]  ${arg}
