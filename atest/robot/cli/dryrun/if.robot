@@ -15,3 +15,9 @@ ELSE is not executed in dry run
 
 Dryrun fail inside of IF
     Check Test Case    ${TESTNAME}
+
+Dryrun fail inside of ELSE IF
+    Check Test Case    ${TESTNAME}
+
+Dryrun fail inside of ELSE
+    Check Test Case    ${TESTNAME}

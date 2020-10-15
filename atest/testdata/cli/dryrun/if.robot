@@ -21,6 +21,26 @@ Dryrun fail inside of IF
     END
     This is validated
 
+Dryrun fail inside of ELSE IF
+    [Documentation]    FAIL    Keyword 'resource.Anarchy in the UK' expected 3 arguments, got 1.
+    IF  'total' == 'empty'
+       Log  this is fine
+    ELSE IF  'something' == 'thing'
+       Anarchy in the UK    1
+    ELSE
+       Log  fine and dandy
+    END
+    This is validated
+
+Dryrun fail inside of ELSE
+    [Documentation]    FAIL    Keyword 'resource.Anarchy in the UK' expected 3 arguments, got 0.
+    IF  'total' == 'empty'
+       Log  this is fine
+    ELSE
+       Anarchy in the UK
+    END
+    This is validated
+
 *** Keywords ***
 Recursive if
     [Arguments]  ${arg}
