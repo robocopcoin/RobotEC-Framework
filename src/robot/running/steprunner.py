@@ -76,6 +76,8 @@ def ForRunner(context, templated=False, flavor='IN'):
 
 class IfRunner(object):
 
+    current_if_stack = []
+
     def __init__(self, context, templated=False):
         self._context = context
         self._templated = templated
@@ -88,6 +90,7 @@ class IfRunner(object):
         return data.ELSE_IF_TYPE
 
     def run(self, data, name=None):
+        IfRunner.current_if_stack.append(data)
         first = True
         condition_matched = False
         for datacondition, body in data.bodies:
@@ -98,6 +101,7 @@ class IfRunner(object):
                     runner = StepRunner(self._context, self._templated)
                     runner.run_steps(body)
             first = False
+        IfRunner.current_if_stack.pop()
 
     def _branch_to_be_executed(self, data, first, datacondition, body, condition_matched_already):
         data_type = self._get_type(data, first, datacondition)
@@ -121,7 +125,8 @@ class IfRunner(object):
 
     def _is_branch_to_execute(self, condition_matched_already, condition_result, body):
         if self._context.dry_run:
-            return True
+            current = IfRunner.current_if_stack[-1]
+            return current not in IfRunner.current_if_stack[:-1]
         return not condition_matched_already and condition_result and body
 
     def _get_name(self, condition):
