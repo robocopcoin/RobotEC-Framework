@@ -103,21 +103,26 @@ class IfRunner(object):
         data_type = self._get_type(data, first, datacondition)
         condition_result = data_type == data.ELSE_TYPE
         unresolved_condition = ''
-        if self._context.dry_run:
-            condition_matched_already = True
         if not condition_result:
             unresolved_condition = datacondition[0]
-            if not condition_matched_already:
+            if not condition_matched_already and not self._context.dry_run:
                 condition, _ = VariableReplacer().replace([unresolved_condition], (), variables=self._context.variables)
                 resolved_condition = condition[0]
                 if is_unicode(resolved_condition):
                     condition_result = evaluate_expression(resolved_condition, self._context.variables)
                 else:
                     condition_result = bool(resolved_condition)
-        branch_to_execute = not condition_matched_already and condition_result and body
+        branch_to_execute = self._is_branch_to_execute(condition_matched_already,
+                                                       condition_result,
+                                                       body)
         result = KeywordResult(kwname=self._get_name(unresolved_condition),
                                type=data_type)
         return branch_to_execute, result
+
+    def _is_branch_to_execute(self, condition_matched_already, condition_result, body):
+        if self._context.dry_run:
+            return True
+        return not condition_matched_already and condition_result and body
 
     def _get_name(self, condition):
         if not condition:

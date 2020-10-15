@@ -4,13 +4,13 @@ Test Teardown     Last keyword should have been validated
 Resource          dryrun_resource.robot
 
 *** Test Cases ***
-IF is not executed in dry run
+IF will not recurse in dry run
     Check Test Case    ${TESTNAME}
 
-ELSE IF is not executed in dry run
+ELSE IF will not recurse in dry run
     Check Test Case    ${TESTNAME}
 
-ELSE is not executed in dry run
+ELSE will not recurse in dry run
     Check Test Case    ${TESTNAME}
 
 Dryrun fail inside of IF
