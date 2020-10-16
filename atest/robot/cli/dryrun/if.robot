@@ -8,7 +8,10 @@ IF will not recurse in dry run
     Check Test Case    ${TESTNAME}
 
 ELSE IF will not recurse in dry run
-    Check Test Case    ${TESTNAME}
+    ${tc}=  Check Test Case    ${TESTNAME}
+    Should be equal  ${tc.kws[0].kws[0].type}  if
+    Should be equal  ${tc.kws[0].kws[1].type}  else if
+    Should be equal  ${tc.kws[0].kws[2].type}  else
 
 ELSE will not recurse in dry run
     Check Test Case    ${TESTNAME}
