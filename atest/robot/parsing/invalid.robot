@@ -60,6 +60,25 @@ If with else if after else
     ...    .* Invalid ELSE IF detected after ELSE
     ...    ${PARSING}/if/else_if_after_else.robot
 
+If with empty if
+    Run tests and check parsing error
+    ...    ${PARSING}/if/empty_if.robot
+    ...    .* Empty block detected
+    ...    ${PARSING}/if/empty_if.robot
+
+If with empty else
+    Run tests and check parsing error
+    ...    ${PARSING}/if/empty_else.robot
+    ...    .* Empty block detected
+    ...    ${PARSING}/if/empty_else.robot
+
+If with empty else_if
+    Run tests and check parsing error
+    ...    ${PARSING}/if/empty_else_if.robot
+    ...    .* Empty block detected
+    ...    ${PARSING}/if/empty_else_if.robot
+
+
 Multisource Containing File With Invalid Encoding
     Run tests and check parsing error
     ...    ${PARSING}/invalid_encoding/invalid_encoding.robot ${PARSING}/invalid_encoding/a_valid_file.robot
