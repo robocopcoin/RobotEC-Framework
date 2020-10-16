@@ -250,7 +250,7 @@ class IfBlockLexer(BlockLexer):
         elif isinstance(lexer, EndLexer):
             if not self._last_block_has_content:
                 raise DataError("line [%s] : Empty block detected" % lexer.lineno)
-            self._last_block_has_content = False
+            self._last_block_has_content = self._block_level > 1
             self._end_seen = self._block_level == 1
             self._block_level -= 1
         elif isinstance(lexer, ElseLexer):
