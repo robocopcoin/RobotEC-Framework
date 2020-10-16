@@ -30,3 +30,6 @@ Direct Boolean condition false
 
 Nesting insanity
    Check Test Case    ${TESTNAME}
+
+Recursive If
+   Check Test Case    ${TESTNAME}

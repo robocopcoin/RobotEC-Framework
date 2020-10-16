@@ -93,3 +93,13 @@ Nesting insanity
       END
    END
    Should be equal  ${assumption}  2 5 9 8 7 8 9 5 2
+
+Recursive if
+   Recurse  1
+
+*** Keywords ***
+Recurse
+   [Arguments]  ${value}
+   IF  ${value} < 1000
+       Recurse  ${value}0
+   END
