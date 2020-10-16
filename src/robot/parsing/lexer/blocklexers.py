@@ -234,6 +234,7 @@ class IfBlockLexer(BlockLexer):
         self._end_seen = False
         self._else_seen = False
         self._block_level = 0
+        self._last_block_has_content = False
 
     def handles(self, statement):
         return IfStatementLexer(self.ctx).handles(statement)
@@ -245,15 +246,28 @@ class IfBlockLexer(BlockLexer):
         lexer = BlockLexer.input(self, statement)
         if isinstance(lexer, (IfStatementLexer, ForLoopHeaderLexer)):
             self._block_level += 1
-        if isinstance(lexer, EndLexer):
+            self._last_block_has_content = isinstance(lexer, ForLoopHeaderLexer)
+        elif isinstance(lexer, EndLexer):
+            if not self._last_block_has_content:
+                raise DataError("line [%s] : Empty block detected" % lexer.lineno)
+            self._last_block_has_content = False
             self._end_seen = self._block_level == 1
             self._block_level -= 1
-        if isinstance(lexer, ElseLexer):
+        elif isinstance(lexer, ElseLexer):
+            if not self._last_block_has_content:
+                raise DataError("line [%s] : Empty block detected" % lexer.lineno)
+            self._last_block_has_content = False
             if self._else_seen:
                 raise DataError("line [%s] : Invalid second ELSE detected" % lexer.lineno)
             self._else_seen = True
-        if isinstance(lexer, ElseIfStatementLexer) and self._else_seen:
-            raise DataError("line [%s] : Invalid ELSE IF detected after ELSE" % lexer.lineno)
+        elif isinstance(lexer, ElseIfStatementLexer):
+            if not self._last_block_has_content:
+                raise DataError("line [%s] : Empty block detected" % lexer.lineno)
+            self._last_block_has_content = False
+            if self._else_seen:
+                raise DataError("line [%s] : Invalid ELSE IF detected after ELSE" % lexer.lineno)
+        else:
+            self._last_block_has_content = True
 
     def lexer_classes(self):
         return (IfStatementLexer, ElseIfStatementLexer, ElseLexer, ForLoopHeaderLexer, EndLexer, KeywordCallLexer)
