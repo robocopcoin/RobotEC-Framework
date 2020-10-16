@@ -36,3 +36,6 @@ Recursive If
 
 If creating variable
    Check Test Case    ${TESTNAME}
+
+If inside if
+   Check Test Case    ${TESTNAME}

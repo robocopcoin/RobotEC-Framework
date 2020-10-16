@@ -106,6 +106,21 @@ If creating variable
    Should be equal  ${var}  expected
    Should be equal  ${outer}  inside
 
+If inside if
+   IF  ${True}
+      IF  ${False}
+          Fail  stupid but possible
+      END
+   ELSE IF  ${True}
+      IF  ${False}
+          Fail  stupid but possible
+      END
+   ELSE
+      IF  ${False}
+          Fail  stupid but possible
+      END
+   END
+
 *** Keywords ***
 Recurse
    [Arguments]  ${value}
