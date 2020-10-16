@@ -97,6 +97,15 @@ Nesting insanity
 Recursive if
    Recurse  1
 
+If creating variable
+   ${outer}=  Set Variable  before
+   IF  ${True}
+      ${var}=     Set Variable  expected
+      ${outer}=   Set Variable  inside
+   END
+   Should be equal  ${var}  expected
+   Should be equal  ${outer}  inside
+
 *** Keywords ***
 Recurse
    [Arguments]  ${value}

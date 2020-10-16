@@ -33,3 +33,6 @@ Nesting insanity
 
 Recursive If
    Check Test Case    ${TESTNAME}
+
+If creating variable
+   Check Test Case    ${TESTNAME}
