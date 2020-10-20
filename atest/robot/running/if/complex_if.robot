@@ -40,5 +40,8 @@ If creating variable
 If inside if
    Check Test Case    ${TESTNAME}
 
-For loop for loop if else if else early exit
+For loop if else early exit
+   Check Test Case    ${TESTNAME}
+
+For loop if else if early exit
    Check Test Case    ${TESTNAME}
