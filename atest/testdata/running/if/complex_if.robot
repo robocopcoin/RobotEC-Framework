@@ -94,6 +94,18 @@ Nesting insanity
    END
    Should be equal  ${assumption}  2 5 9 8 7 8 9 5 2
 
+For loop for loop if else if else early exit
+  FOR  ${iter1}  IN  1  2  3
+     IF   1 > 2
+         Fail   should not execute if branch
+     ELSE IF  3 > 5
+         Fail   should not execute else if branch
+     ELSE
+         Pass Execution  From the condition
+     END
+  END
+  Fail  should not execute end of test
+
 Recursive if
    Recurse  1
 
