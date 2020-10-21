@@ -410,10 +410,10 @@
                 <ul class="arguments-list">
                 {{each args}}
                   <li>
-                    <div class="arg ${$value.kind} {{if $value.required}}arg-required{{else}}arg-optional{{/if}}">
-                      <span class="arg-name">{{if $value.kind === 'VAR_POSITIONAL'}}*{{/if}}{{if $value.kind === 'VAR_NAMED'}}**{{/if}}${$value.name}</span>
-                      {{if $value.type}}: <span class="arg-type">${$value.type}</span>{{/if}}
-                      {{if $value.default !== null}} = <span class="arg-default-value">${$value.default}</span>{{/if}}
+                    <div class="arg ${$value.kind} {{if $value.required}}arg-required{{else}}arg-optional{{/if}}{{if $value.type}} arg-with-type{{/if}}">
+                      <span class="arg-name" title="Argument name">{{if $value.kind === 'VAR_POSITIONAL'}}*{{/if}}{{if $value.kind === 'VAR_NAMED'}}**{{/if}}${$value.name}</span>
+                      {{if $value.default !== null}} = <span class="arg-default-value" title="Argument default value">${$value.default}</span>{{/if}}
+                      {{if $value.type}}<span class="arg-type" title="Argument '${$value.name}' type">(${$value.type})</span>{{/if}}
                     </div>
                   </li>
                 {{/each}}

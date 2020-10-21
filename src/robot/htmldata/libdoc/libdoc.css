@@ -254,6 +254,38 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
     letter-spacing: 0.1em;
 }
 
+ul.arguments-list {
+    list-style: none;
+    padding: 0;
+}
+
+.arguments-list .arg {
+    display: flex;
+    width: 100%;
+    border: 1px solid var(--background-color);
+    border-radius: 3px;
+}
+
+.arguments-list .arg-with-type:hover {
+    border: 1px solid var(--border-color);
+}
+
+.arguments-list .arg-name {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.arguments-list .arg-default-value {
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.arguments-list .arg-type {
+    margin-left: auto;
+    background: var(--background-color);
+}
+
 @media only screen and (min-width: 900px) {
     .libdoc-details {
         z-index: 1;
@@ -396,7 +428,7 @@ input.switch:checked + .slider::before {
 }
 @media only screen and (min-width: 899px) {
     .kw-overview {
-        max-width: 400px;
+        max-width: 650px;
         margin-right: 1.5rem;
     }
 }
