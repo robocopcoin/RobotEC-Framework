@@ -263,14 +263,8 @@ ul.arguments-list {
 .arguments-list .arg {
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--background-color);
-    border-radius: 3px;
     align-items: baseline;
     margin-bottom: 0.5rem;
-}
-
-.arguments-list .arg-with-type:hover {
-    border: 1px solid var(--border-color);
 }
 
 .arguments-list .arg-name {
