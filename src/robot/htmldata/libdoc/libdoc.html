@@ -311,7 +311,9 @@
                   <div class="arg ${$value.kind} {{if $value.required}}arg-required{{else}}arg-optional{{/if}}{{if $value.type}} arg-with-type{{/if}}">
                   <div class="base-arg-data">
                   <span class="arg-name" title="Argument name">{{if $value.kind === 'VAR_POSITIONAL'}}*{{/if}}{{if $value.kind === 'VAR_NAMED'}}**{{/if}}${$value.name}</span>
-                  {{if $value.default !== null}} = <span class="arg-default-value" title="Argument default value">${$value.default}</span>{{/if}}
+                  {{if $value.default !== null}}<span class="arg-default-eq">=</span>
+                  <span class="arg-default-value" title="Argument default value">${$value.default}</span>
+                  {{/if}}
                   </div>
                   {{if $value.type}}<span class="arg-type" title="Argument '${$value.name}' will be converter to type ${$value.type}">(${$value.type})</span>{{/if}}
                   </div>
@@ -417,7 +419,10 @@
                     <div class="arg ${$value.kind} {{if $value.required}}arg-required{{else}}arg-optional{{/if}}{{if $value.type}} arg-with-type{{/if}}">
                     <div class="base-arg-data">
                     <span class="arg-name" title="Argument name">{{if $value.kind === 'VAR_POSITIONAL'}}*{{/if}}{{if $value.kind === 'VAR_NAMED'}}**{{/if}}${$value.name}</span>
-                    {{if $value.default !== null}} = <span class="arg-default-value" title="Argument default value">${$value.default}</span>{{/if}}
+                    {{if $value.default !== null}}
+                    <span class="arg-default-eq">=</span>
+                    <span class="arg-default-value" title="Argument default value">${$value.default}</span>
+                    {{/if}}
                     </div>
                     {{if $value.type}}<span class="arg-type" title="Argument '${$value.name}' will be converter to type ${$value.type}">(${$value.type})</span>{{/if}}
                     </div>

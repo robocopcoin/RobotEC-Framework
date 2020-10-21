@@ -272,6 +272,10 @@ ul.arguments-list {
     margin-right: 0.5rem;
 }
 
+.arguments-list .arg-default-eq {
+    background: var(--background-color);
+}
+
 .arguments-list .arg-default-value {
     margin-left: 0.5rem;
     padding-left: 0.5rem;
