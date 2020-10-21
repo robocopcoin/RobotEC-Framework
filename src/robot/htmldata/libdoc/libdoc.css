@@ -256,12 +256,12 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
 
 ul.arguments-list {
     list-style: none;
+    overflow-y: auto;
     padding: 0;
 }
 
 .arguments-list .arg {
     display: flex;
-    width: 100%;
     border: 1px solid var(--background-color);
     border-radius: 3px;
 }
@@ -281,8 +281,13 @@ ul.arguments-list {
     padding-right: 0.5rem;
 }
 
+.arguments-list .base-arg-data {
+    display: flex;
+    min-width: 150px;
+}
+
 .arguments-list .arg-type {
-    margin-left: auto;
+    margin-left: 3rem;
     background: var(--background-color);
 }
 
@@ -428,7 +433,7 @@ input.switch:checked + .slider::before {
 }
 @media only screen and (min-width: 899px) {
     .kw-overview {
-        max-width: 650px;
+        max-width: 850px;
         margin-right: 1.5rem;
     }
 }
