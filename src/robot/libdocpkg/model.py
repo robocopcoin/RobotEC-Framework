@@ -17,7 +17,7 @@ from itertools import chain
 import re
 
 from robot.model import Tags
-from robot.utils import getshortdoc, get_timestamp, Sortable, setter, unicode, unic
+from robot.utils import getshortdoc, get_timestamp, Sortable, setter, unicode, is_unicode
 
 from .htmlutils import HtmlToText, DocFormatter
 from .writer import LibdocWriter
@@ -149,10 +149,17 @@ class KeywordDoc(Sortable):
             'matched': True
         }
 
+    def _argument_default_repr(self, value):
+        if is_unicode(value):
+            for target, replace in (("\\", "\\\\"), ("\n", "\\n"), ("\t", "\\t"), ("\r", "\\r")):
+                value = value.replace(target, replace)
+            return re.sub('^(?= )|(?<= )$|(?<= )(?= )', r'\\', value)
+        return value
+
     def _convert_arguments(self):
         return [{'name': a.name,
                  'type': a.type_repr,
-                 'default': a.default_repr,
+                 'default': self._argument_default_repr(a.default_repr),
                  'kind': a.kind,
                  'required': a.required,
                  'repr': unicode(a)
