@@ -9,7 +9,7 @@ pygments; platform_python_implementation != 'IronPython'
 
 # https://github.com/yaml/pyyaml/issues/369
 pyyaml; platform_python_implementation != 'Jython'
-pyyaml == 5.2; platform_python_implementation == 'Jython'
+pyyaml == 5.4; platform_python_implementation == 'Jython'
 
 # On Linux installing lxml with pip may require compilation and development
 # headers. Alternatively it can be installed using a package manager like
